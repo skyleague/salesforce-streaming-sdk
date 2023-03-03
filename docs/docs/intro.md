@@ -1,14 +1,10 @@
-# Salesforce Streaming SDK [_(@skyleague/salesforce-streaming-sdk)_](https://skyleague.github.io/salesforce-streaming-sdk/)
+---
+sidebar_position: 0
+title: Overview
+slug: /
+---
 
-<p>
-  <img alt="Lines of code" src="https://img.shields.io/tokei/lines/github/skyleague/salesforce-streaming-sdk" />
-  <img alt="Version" src="https://img.shields.io/github/package-json/v/skyleague/salesforce-streaming-sdk" />
-  <!-- <img alt="LGTM Grade" src="https://img.shields.io/lgtm/grade/javascript/github/skyleague/salesforce-streaming-sdk" /> -->
-  <img src="https://img.shields.io/badge/node-%3E%3D16-blue.svg" />
-  <a href="#" target="_blank">
-    <img alt="License: MIT" src="https://img.shields.io/badge/License-MIT-yellow.svg" />
-  </a>
-</p>
+# _@skyleague/salesforce-streaming-sdk_
 
 This _independent_ TypeScript SDK provides CometD clients for the [Salesforce Streaming API](https://developer.salesforce.com/docs/atlas.en-us.api_streaming.meta/api_streaming/intro_stream.htm) based on the published documentation.
 

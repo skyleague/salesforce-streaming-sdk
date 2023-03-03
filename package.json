@@ -1,23 +1,29 @@
 {
   "name": "@skyleague/salesforce-streaming-sdk",
   "version": "1.0.0",
+  "description": "SDK for subscribing to the Salesforce Streaming API",
+  "homepage": "https://skyleague.github.io/salesforce-streaming-sdk/",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "node-standards": {
-    "type": "library"
+    "type": "library",
+    "template": {
+      "documentation": "docusaurus"
+    }
   },
-  "files": [
-    "dist",
-    "package.json"
-  ],
+  "files": ["dist", "package.json"],
   "publishConfig": {
     "registry": "https://registry.npmjs.org",
     "access": "public"
   },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/skyleague/salesforce-streaming-sdk.git"
+  },
   "scripts": {
     "build": "npx ts-node build.config.ts",
     "build:clean": "npx tsc --build --clean && rm .main.js && rm .main.js.map",
-    "build:docs": "npx typedoc",
+    "build:docs": "(cd docs; npm install; npm run build)",
     "check:cost": "npx cost-of-modules --no-install --include-dev",
     "check:coverage": "npx jest --collectCoverage=true",
     "check:full": "npm run lint && npm run check:types && npm run check:coverage && npm run build && npm run check:project",
