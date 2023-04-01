@@ -1,13 +1,18 @@
-import { defaultStreamingApiPath, defaultSupportedTransportTypes } from './constants'
-import type { CreateObservableInput } from './observable-types'
+import { defaultStreamingApiPath, defaultSupportedTransportTypes } from './constants.js'
+import type { CreateObservableInput } from './observable-types.js'
 
-import { replayExtension } from '../extensions'
+import { replayExtension } from '../extensions/index.js'
 
 import { evaluate, mapValues, omitUndefined, memoize, defer } from '@skyleague/axioms'
-import type { Message, SubscriptionHandle } from 'cometd'
-import { CometD } from 'cometd'
+import type { CometD, Message, SubscriptionHandle } from 'cometd'
 
-// eslint-disable-next-line @typescript-eslint/consistent-type-imports, @typescript-eslint/no-var-requires
+import { createRequire } from 'node:module'
+
+const require = createRequire(import.meta.url)
+// eslint-disable-next-line @typescript-eslint/consistent-type-imports
+const { CometD: _CometD } = require('cometd') as typeof import('cometd')
+
+// eslint-disable-next-line @typescript-eslint/consistent-type-imports
 const applyAdapter = memoize(() => (require('cometd-nodejs-client') as typeof import('cometd-nodejs-client')).adapt())
 
 export class SalesforceStreamingObservable {
@@ -18,7 +23,7 @@ export class SalesforceStreamingObservable {
         if (enableAdapter) {
             applyAdapter()
         }
-        this.client = new CometD()
+        this.client = new _CometD()
         this.subscriptions = {}
     }
     public static async create({
@@ -107,7 +112,7 @@ export class SalesforceStreamingObservable {
             throw new Error(`Channel has no subscription (channel: ${channel})`)
         }
         const unsubscribed = defer<Message, Message>()
-        this.client.unsubscribe(this.subscriptions[channel], (message) => {
+        this.client.unsubscribe(this.subscriptions[channel]!, (message) => {
             if (message.successful) {
                 unsubscribed.resolve(message)
             } else {

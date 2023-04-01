@@ -1,9 +1,9 @@
-import { defaultStreamingApiPath, defaultSupportedTransportTypes } from './constants'
-import { SalesforceStreamingObservable } from './observable'
-import type { SubscribeInput, SubscribePlatformEventInput } from './streaming-types'
+import { defaultStreamingApiPath, defaultSupportedTransportTypes } from './constants.js'
+import { SalesforceStreamingObservable } from './observable.js'
+import type { SubscribeInput, SubscribePlatformEventInput } from './streaming-types.js'
 
-import type { SalesforceMessage } from '../types'
-import { validateSalesforceMessage } from '../types'
+import type { SalesforceMessage } from '../types/index.js'
+import { validateSalesforceMessage } from '../types/index.js'
 
 import { defer, omitUndefined, sleep } from '@skyleague/axioms'
 import type { Message } from 'cometd'

@@ -1,4 +1,4 @@
-import { replayExtension } from './replay'
+import { replayExtension } from './replay.js'
 
 import { alphaNumeric, dict, forAll, integer, tuple, unknown } from '@skyleague/axioms'
 

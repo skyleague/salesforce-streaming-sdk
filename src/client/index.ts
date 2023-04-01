@@ -1,2 +1,2 @@
-export { SalesforceStreamingObservable } from './observable'
-export { SalesforceStreaming } from './streaming'
+export { SalesforceStreamingObservable } from './observable.js'
+export { SalesforceStreaming } from './streaming.js'

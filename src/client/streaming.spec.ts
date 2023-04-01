@@ -1,4 +1,4 @@
-import { SalesforceMessage, SalesforceStreaming, SalesforceStreamingObservable } from '..'
+import { SalesforceMessage, SalesforceStreaming, SalesforceStreamingObservable } from '../index.js'
 
 import { array, asyncForAll, sleep } from '@skyleague/axioms'
 import { arbitrary } from '@skyleague/therefore'

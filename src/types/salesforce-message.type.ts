@@ -20,7 +20,8 @@ export interface SalesforceMessage {
 }
 
 export const SalesforceMessage = {
-    validate: require('./schemas/salesforce-message.schema.js') as ValidateFunction<SalesforceMessage>,
+    validate: (await import('./schemas/salesforce-message.schema.js'))
+        .validate10 as unknown as ValidateFunction<SalesforceMessage>,
     get schema() {
         return SalesforceMessage.validate.schema
     },

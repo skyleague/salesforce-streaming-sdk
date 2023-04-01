@@ -1,4 +1,4 @@
-import { SalesforceMessage } from './salesforce-message.type'
+import { SalesforceMessage } from './salesforce-message.type.js'
 
 import type { Message } from 'cometd'
 
