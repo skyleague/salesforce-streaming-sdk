@@ -1,1 +1,1 @@
-export { replayExtension } from './replay'
+export { replayExtension } from './replay.js'

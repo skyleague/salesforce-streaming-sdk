@@ -1,4 +1,4 @@
-import { SalesforceMessage } from './salesforce-message.type'
+import { SalesforceMessage } from './salesforce-message.type.js'
 
 import type { Dependent } from '@skyleague/axioms'
 import { alphaNumeric, constant, dict, forAll, integer, object, unknown } from '@skyleague/axioms'
