@@ -1,6 +1,7 @@
 import { SalesforceStreamingObservable } from './index.js'
 
 import { json, random, sleep } from '@skyleague/axioms'
+import { expect, beforeAll, afterEach, afterAll, it, vi } from 'vitest'
 
 import http from 'node:http'
 import { createRequire } from 'node:module'
@@ -10,12 +11,16 @@ const require = createRequire(import.meta.url)
 const cometServer = (require('cometd-nodejs-server') as typeof import('cometd-nodejs-server')).createCometDServer()
 const server = http.createServer(cometServer.handle)
 
-beforeAll((done) => {
-    server.listen(12345, 'localhost', done)
-})
-afterAll((done) => {
+beforeAll(
+    () =>
+        new Promise((done) => {
+            server.listen(12345, 'localhost', done)
+        })
+)
+
+afterAll(() => {
     cometServer.close()
-    server.close(done)
+    server.close()
 }, 60_000)
 
 let client: SalesforceStreamingObservable
@@ -25,7 +30,7 @@ afterEach(() => {
     client.disconnect()
 })
 
-test('is able to connect', async () => {
+it('is able to connect', async () => {
     const channel = '/event/foo__e'
     const serverChannel = cometServer.createServerChannel(channel)
     const session = cometServer.getServerSession(channel)
@@ -37,7 +42,7 @@ test('is able to connect', async () => {
     })
     await client.connect()
 
-    const onMessage = jest.fn()
+    const onMessage = vi.fn()
     await client.subscribe(channel, onMessage)
 
     const data = random(json({ type: 'object' }))
