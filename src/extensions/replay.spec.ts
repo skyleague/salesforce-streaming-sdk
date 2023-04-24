@@ -1,9 +1,10 @@
 import { replayExtension } from './replay.js'
 
 import { alphaNumeric, dict, forAll, integer, tuple, unknown } from '@skyleague/axioms'
+import { expect, describe, it, vi } from 'vitest'
 
 describe('incoming', () => {
-    test.each([true, false])(
+    it.each([true, false])(
         'checks the handshake message to see if the server supports the extension, server enabled: %s',
         (enabled) => {
             const extension = replayExtension({})
@@ -17,10 +18,10 @@ describe('incoming', () => {
         }
     )
 
-    test('ignores messages on channels other than the handshake', () => {
+    it('ignores messages on channels other than the handshake', () => {
         forAll(alphaNumeric({ minLength: 1 }), (channel) => {
             const extension = replayExtension({})
-            const ext = jest.fn(() => ({}))
+            const ext = vi.fn(() => ({}))
 
             const message = {
                 channel,
@@ -35,7 +36,7 @@ describe('incoming', () => {
 })
 
 describe('outgoing', () => {
-    test('adds the replay ID for known channels, if the server supports replay', () => {
+    it('adds the replay ID for known channels, if the server supports replay', () => {
         forAll(tuple(dict(integer({ min: 1 })), unknown()), ([replayIds, data]) => {
             const extension = replayExtension(replayIds)
             extension.incoming({ channel: '/meta/handshake', ext: { replay: true } })
@@ -44,7 +45,7 @@ describe('outgoing', () => {
             expect(extension.outgoing(message)).toEqual({ ...message, ext: { replay: replayIds } })
         })
     })
-    test("doesn't add the replay ID for known channels, if the server doesn't support replay", () => {
+    it("doesn't add the replay ID for known channels, if the server doesn't support replay", () => {
         forAll(tuple(dict(integer({ min: 1 })), unknown()), ([replayIds, data]) => {
             const extension = replayExtension(replayIds)
             extension.incoming({ channel: '/meta/handshake' })
@@ -53,7 +54,7 @@ describe('outgoing', () => {
             expect(extension.outgoing(message)).toEqual(message)
         })
     })
-    test('ignores messages on channels other than the subscribe', () => {
+    it('ignores messages on channels other than the subscribe', () => {
         forAll(alphaNumeric({ minLength: 1 }), (channel) => {
             const extension = replayExtension({})
             extension.incoming({ channel: '/meta/handshake', ext: { replay: true } })
