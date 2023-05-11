@@ -43,8 +43,8 @@
     "tslib": "^2.5.0"
   },
   "devDependencies": {
-    "@skyleague/node-standards": "^3.0.0",
-    "@skyleague/therefore": "^2.0.3",
+    "@skyleague/node-standards": "^3.6.0",
+    "@skyleague/therefore": "^2.1.2",
     "cometd-nodejs-server": "^1.2.0",
     "typescript": "^5.0.4"
   },
@@ -53,6 +53,7 @@
   },
   "publishConfig": {
     "access": "public",
+    "provenance": true,
     "registry": "https://registry.npmjs.org"
   },
   "node-standards": {
