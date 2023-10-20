@@ -3,8 +3,8 @@
  * Do not manually touch this
  */
 /* eslint-disable */
-import AjvValidator from 'ajv'
 import type { ValidateFunction } from 'ajv'
+import { ValidationError } from 'ajv'
 
 export interface SalesforceMessage {
     data: {
@@ -20,8 +20,7 @@ export interface SalesforceMessage {
 }
 
 export const SalesforceMessage = {
-    validate: (await import('./schemas/salesforce-message.schema.js'))
-        .validate10 as unknown as ValidateFunction<SalesforceMessage>,
+    validate: (await import('./schemas/salesforce-message.schema.js')).validate as ValidateFunction<SalesforceMessage>,
     get schema() {
         return SalesforceMessage.validate.schema
     },
@@ -31,7 +30,7 @@ export const SalesforceMessage = {
     is: (o: unknown): o is SalesforceMessage => SalesforceMessage.validate(o) === true,
     assert: (o: unknown) => {
         if (!SalesforceMessage.validate(o)) {
-            throw new AjvValidator.ValidationError(SalesforceMessage.errors ?? [])
+            throw new ValidationError(SalesforceMessage.errors ?? [])
         }
     },
 } as const
