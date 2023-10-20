@@ -43,7 +43,7 @@
   },
   "devDependencies": {
     "@skyleague/node-standards": "^3.10.5",
-    "@skyleague/therefore": "^3.0.1",
+    "@skyleague/therefore": "^3.0.2",
     "cometd-nodejs-server": "^1.2.0",
     "typescript": "^5.2.2"
   },
