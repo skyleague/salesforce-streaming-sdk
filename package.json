@@ -20,7 +20,7 @@
     "package.json"
   ],
   "scripts": {
-    "build": "npx ts-node --esm build.config.ts",
+    "build": "node --import tsx/esm build.config.ts",
     "build:docs": "(cd docs; npm install; npm run build)",
     "check:cost": "npx cost-of-modules --no-install --include-dev",
     "check:coverage": "npx vitest run --coverage=true",
@@ -36,19 +36,19 @@
     "test": "npx vitest run"
   },
   "dependencies": {
-    "@skyleague/axioms": "^2.5.1",
+    "@skyleague/axioms": "^3.0.2",
     "cometd": "^7.0.10",
     "cometd-nodejs-client": "^1.4.0",
     "tslib": "^2.6.2"
   },
   "devDependencies": {
-    "@skyleague/node-standards": "^3.10.5",
-    "@skyleague/therefore": "^3.0.2",
+    "@skyleague/node-standards": "^4.1.0",
+    "@skyleague/therefore": "^4.1.0",
     "cometd-nodejs-server": "^1.2.0",
-    "typescript": "^5.2.2"
+    "typescript": "^5.3.3"
   },
   "engines": {
-    "node": ">=18"
+    "node": ">=20"
   },
   "publishConfig": {
     "access": "public",
