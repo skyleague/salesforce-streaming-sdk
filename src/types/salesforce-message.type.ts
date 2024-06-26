@@ -3,12 +3,14 @@
  * Do not manually touch this
  */
 /* eslint-disable */
-import type { ValidateFunction } from 'ajv'
-import { ValidationError } from 'ajv'
+
+import type { DefinedError, ValidateFunction } from 'ajv'
+
+import { validate as SalesforceMessageValidator } from './schemas/salesforce-message.schema.js'
 
 export interface SalesforceMessage {
     data: {
-        schema?: string
+        schema?: string | undefined
         payload: unknown
         event: {
             EventUuid: string
@@ -16,11 +18,11 @@ export interface SalesforceMessage {
             EventApiName: string
         }
     }
-    channel?: string
+    channel?: string | undefined
 }
 
 export const SalesforceMessage = {
-    validate: (await import('./schemas/salesforce-message.schema.js')).validate as ValidateFunction<SalesforceMessage>,
+    validate: SalesforceMessageValidator as ValidateFunction<SalesforceMessage>,
     get schema() {
         return SalesforceMessage.validate.schema
     },
@@ -28,9 +30,10 @@ export const SalesforceMessage = {
         return SalesforceMessage.validate.errors ?? undefined
     },
     is: (o: unknown): o is SalesforceMessage => SalesforceMessage.validate(o) === true,
-    assert: (o: unknown) => {
-        if (!SalesforceMessage.validate(o)) {
-            throw new ValidationError(SalesforceMessage.errors ?? [])
+    parse: (o: unknown): { right: SalesforceMessage } | { left: DefinedError[] } => {
+        if (SalesforceMessage.is(o)) {
+            return { right: o }
         }
+        return { left: (SalesforceMessage.errors ?? []) as DefinedError[] }
     },
 } as const

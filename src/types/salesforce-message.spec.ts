@@ -28,10 +28,10 @@ it('validation', () => {
                         channel: constant(`/event/${eventType}`),
                         // Doesn't actually exist, just testing the validation to be lenient
                         meta: unknown(),
-                    })
+                    }),
             ),
         (message: Message) => {
             expect(SalesforceMessage.is(message)).toBe(true)
-        }
+        },
     )
 })

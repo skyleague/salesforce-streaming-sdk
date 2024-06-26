@@ -3,7 +3,7 @@ import type { CreateObservableInput } from './observable-types.js'
 
 import { replayExtension } from '../extensions/index.js'
 
-import { evaluate, mapValues, omitUndefined, memoize, defer } from '@skyleague/axioms'
+import { defer, evaluate, mapValues, memoize, omitUndefined } from '@skyleague/axioms'
 import type { CometD, Message, SubscriptionHandle } from 'cometd'
 
 import { createRequire } from 'node:module'
@@ -58,6 +58,7 @@ export class SalesforceStreamingObservable {
 
         replayIds = omitUndefined(replayIds ?? {})
         if (Object.keys(replayIds).length > 0) {
+            // biome-ignore lint/style/noNonNullAssertion: mapValues doesn't return undefined
             instance.client.registerExtension('replay', replayExtension(mapValues(replayIds, (v) => (v === 'all' ? -2 : v!))))
         }
 
@@ -99,7 +100,7 @@ export class SalesforceStreamingObservable {
                 } else {
                     subscribed.reject(message)
                 }
-            }
+            },
         )
         await subscribed
         this.subscriptions[channel] = handle
@@ -112,6 +113,7 @@ export class SalesforceStreamingObservable {
             throw new Error(`Channel has no subscription (channel: ${channel})`)
         }
         const unsubscribed = defer<Message, Message>()
+        // biome-ignore lint/style/noNonNullAssertion: existence of subscription is checked above
         this.client.unsubscribe(this.subscriptions[channel]!, (message) => {
             if (message.successful) {
                 unsubscribed.resolve(message)

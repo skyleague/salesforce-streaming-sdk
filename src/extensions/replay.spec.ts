@@ -1,7 +1,7 @@
 import { replayExtension } from './replay.js'
 
 import { alphaNumeric, dict, forAll, integer, tuple, unknown } from '@skyleague/axioms'
-import { expect, describe, it, vi } from 'vitest'
+import { describe, expect, it, vi } from 'vitest'
 
 describe('incoming', () => {
     it.each([true, false])(
@@ -15,7 +15,7 @@ describe('incoming', () => {
             }
             expect(extension.incoming(message)).toEqual(message)
             expect(extension.enabled).toBe(enabled)
-        }
+        },
     )
 
     it('ignores messages on channels other than the handshake', () => {

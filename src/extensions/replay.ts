@@ -2,7 +2,7 @@ import type { RequireKeys } from '@skyleague/axioms'
 import type { Extension } from 'cometd'
 
 export function replayExtension(
-    replayIds: Record<string, number>
+    replayIds: Record<string, number>,
 ): RequireKeys<Extension, 'incoming' | 'outgoing'> & { readonly enabled: boolean } {
     let enabled = false
     return {
