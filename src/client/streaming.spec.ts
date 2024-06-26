@@ -8,7 +8,7 @@ it('yields all the items', async () => {
     await asyncForAll(
         array(
             arbitrary(SalesforceMessage).map((e) => ({ ...e, channel: '/event/myEvent' })),
-            { maxLength: 20 }
+            { maxLength: 20 },
         ),
         async (messages) => {
             vi.spyOn(SalesforceStreamingObservable.prototype, 'connect').mockResolvedValue(undefined as any)
@@ -40,6 +40,6 @@ it('yields all the items', async () => {
             }
             expect(results).toEqual(messages)
         },
-        { tests: 5 }
+        { tests: 5 },
     )
 }, 120_000)

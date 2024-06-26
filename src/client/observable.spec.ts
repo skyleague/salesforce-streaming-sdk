@@ -1,7 +1,7 @@
 import { SalesforceStreamingObservable } from './index.js'
 
 import { json, random, sleep } from '@skyleague/axioms'
-import { expect, beforeAll, afterEach, afterAll, it, vi } from 'vitest'
+import { afterAll, afterEach, beforeAll, expect, it, vi } from 'vitest'
 
 import http from 'node:http'
 import { createRequire } from 'node:module'
@@ -15,7 +15,7 @@ beforeAll(
     () =>
         new Promise((done) => {
             server.listen(12345, 'localhost', done)
-        })
+        }),
 )
 
 afterAll(() => {

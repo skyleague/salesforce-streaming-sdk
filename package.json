@@ -15,37 +15,29 @@
     "./*.js": "./.dist/*.js"
   },
   "types": "./.dist/index.d.ts",
-  "files": [
-    ".dist",
-    "package.json"
-  ],
+  "files": [".dist", "package.json"],
   "scripts": {
-    "build": "node --import tsx/esm build.config.ts",
-    "build:docs": "(cd docs; npm install; npm run build)",
-    "check:cost": "npx cost-of-modules --no-install --include-dev",
-    "check:coverage": "npx vitest run --coverage=true",
-    "check:full": "npm run lint && npm run check:types && npm run check:coverage && npm run check:project",
-    "check:project": "npx node-standards lint",
-    "check:types": "npx tsc -p tsconfig.json",
-    "format": "npx prettier \"**/*.{ts,js,json,yml,yaml,md}\" --write",
-    "lint": "npx eslint \"./{src,test,typings}/**/*.ts\" --cache --no-eslintrc --config .eslintrc.cjs",
-    "lint:fix": "npm run lint -- --fix",
-    "lint:full": "bash -c \"FULL_LINT=true npm run lint\"",
+    "build": "tsc -p tsconfig.dist.json",
+    "build:docs": "npm run --workspace=docs build",
+    "check:coverage": "vitest run --coverage=true",
+    "check:project": "node-standards lint",
+    "check:types": "tsc -p tsconfig.json",
+    "lint": "biome check",
+    "lint:fix": "npm run lint -- --write --unsafe",
     "package": "rm -rf .dist && npm run build",
-    "prepare": "npx husky install || true",
-    "test": "npx vitest run"
+    "prepare": "husky || true",
+    "test": "vitest run"
   },
   "dependencies": {
-    "@skyleague/axioms": "^3.0.2",
+    "@skyleague/axioms": "^4.4.0",
     "cometd": "^7.0.10",
-    "cometd-nodejs-client": "^1.4.0",
-    "tslib": "^2.6.2"
+    "cometd-nodejs-client": "^1.4.0"
   },
   "devDependencies": {
-    "@skyleague/node-standards": "^4.1.0",
-    "@skyleague/therefore": "^4.1.0",
+    "@skyleague/node-standards": "^7.2.1",
+    "@skyleague/therefore": "^5.9.1",
     "cometd-nodejs-server": "^1.2.0",
-    "typescript": "^5.3.3"
+    "typescript": "^5.5.2"
   },
   "engines": {
     "node": ">=20"
@@ -56,9 +48,7 @@
     "registry": "https://registry.npmjs.org"
   },
   "node-standards": {
-    "extends": [
-      "library",
-      "docusaurus"
-    ]
-  }
+    "extends": ["library", "docusaurus"]
+  },
+  "workspaces": ["docs"]
 }
