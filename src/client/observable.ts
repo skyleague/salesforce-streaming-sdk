@@ -1,19 +1,12 @@
+import { evaluate, mapValues, memoize, omitUndefined } from '@skyleague/axioms'
+import type { Message, SubscriptionHandle } from 'cometd'
+import { CometD } from 'cometd'
+import { adapt } from 'cometd-nodejs-client'
+import { replayExtension } from '../extensions/index.js'
 import { defaultStreamingApiPath, defaultSupportedTransportTypes } from './constants.js'
 import type { CreateObservableInput } from './observable-types.js'
 
-import { replayExtension } from '../extensions/index.js'
-
-import { defer, evaluate, mapValues, memoize, omitUndefined } from '@skyleague/axioms'
-import type { CometD, Message, SubscriptionHandle } from 'cometd'
-
-import { createRequire } from 'node:module'
-
-const require = createRequire(import.meta.url)
-// eslint-disable-next-line @typescript-eslint/consistent-type-imports
-const { CometD: _CometD } = require('cometd') as typeof import('cometd')
-
-// eslint-disable-next-line @typescript-eslint/consistent-type-imports
-const applyAdapter = memoize(() => (require('cometd-nodejs-client') as typeof import('cometd-nodejs-client')).adapt())
+const applyAdapter = memoize(() => adapt())
 
 export class SalesforceStreamingObservable {
     public readonly client: CometD
@@ -23,7 +16,7 @@ export class SalesforceStreamingObservable {
         if (enableAdapter) {
             applyAdapter()
         }
-        this.client = new _CometD()
+        this.client = new CometD()
         this.subscriptions = {}
     }
     public static async create({
@@ -67,15 +60,15 @@ export class SalesforceStreamingObservable {
 
     public async connect() {
         try {
-            const handshake = defer<Message, Message>()
+            const { promise, resolve, reject } = Promise.withResolvers<Message>()
             this.client.handshake((message) => {
                 if (message.successful) {
-                    handshake.resolve(message)
+                    resolve(message)
                 } else {
-                    handshake.reject(message)
+                    reject(message)
                 }
             })
-            return await handshake
+            return await promise
         } catch (err) {
             this.client.disconnect()
             throw err
@@ -90,37 +83,37 @@ export class SalesforceStreamingObservable {
         if (this.subscriptions[channel] !== undefined) {
             throw new Error(`Channel already has a subscription (channel: ${channel})`)
         }
-        const subscribed = defer<Message, Message>()
+        const { promise, resolve, reject } = Promise.withResolvers<Message>()
         const handle = this.client.subscribe(
             channel,
             (message) => cb(message),
             (message) => {
                 if (message.successful) {
-                    subscribed.resolve(message)
+                    resolve(message)
                 } else {
-                    subscribed.reject(message)
+                    reject(message)
                 }
             },
         )
-        await subscribed
+        await promise
         this.subscriptions[channel] = handle
 
-        return subscribed
+        return promise
     }
 
     public async unsubscribe(channel: string) {
         if (this.subscriptions[channel] === undefined) {
             throw new Error(`Channel has no subscription (channel: ${channel})`)
         }
-        const unsubscribed = defer<Message, Message>()
-        // biome-ignore lint/style/noNonNullAssertion: existence of subscription is checked above
+        const { promise, resolve, reject } = Promise.withResolvers<Message>()
+        // biome-ignore lint/style/noNonNullAssertion: this channel has a subscription
         this.client.unsubscribe(this.subscriptions[channel]!, (message) => {
             if (message.successful) {
-                unsubscribed.resolve(message)
+                resolve(message)
             } else {
-                unsubscribed.reject(message)
+                reject(message)
             }
         })
-        return await unsubscribed
+        return await promise
     }
 }

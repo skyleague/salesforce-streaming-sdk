@@ -1,9 +1,9 @@
-import type { RequireKeys } from '@skyleague/axioms'
+import type { SetRequired } from '@skyleague/axioms/types'
 import type { Extension } from 'cometd'
 
 export function replayExtension(
     replayIds: Record<string, number>,
-): RequireKeys<Extension, 'incoming' | 'outgoing'> & { readonly enabled: boolean } {
+): SetRequired<Extension, 'incoming' | 'outgoing'> & { readonly enabled: boolean } {
     let enabled = false
     return {
         get enabled() {

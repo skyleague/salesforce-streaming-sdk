@@ -18,29 +18,29 @@
   "files": [".dist", "package.json"],
   "scripts": {
     "build": "tsc -p tsconfig.dist.json",
-    "build:docs": "npm run --workspace=docs build",
+    "build:docs": "npm run --prefix=docs build",
     "check:coverage": "vitest run --coverage=true",
     "check:project": "node-standards lint",
     "check:types": "tsc -p tsconfig.json",
     "lint": "biome check",
-    "lint:fix": "npm run lint -- --write --unsafe",
-    "package": "rm -rf .dist && npm run build",
+    "lint:fix": "node --run lint -- --write --unsafe",
+    "package": "rm -rf .dist && node --run build",
     "prepare": "husky || true",
     "test": "vitest run"
   },
   "dependencies": {
-    "@skyleague/axioms": "^4.4.0",
-    "cometd": "^7.0.10",
-    "cometd-nodejs-client": "^1.4.0"
+    "@skyleague/axioms": "^6.5.1",
+    "cometd": "^8.0.6",
+    "cometd-nodejs-client": "^2.0.0"
   },
   "devDependencies": {
-    "@skyleague/node-standards": "^7.2.1",
-    "@skyleague/therefore": "^5.9.1",
-    "cometd-nodejs-server": "^1.2.0",
-    "typescript": "^5.5.2"
+    "@skyleague/node-standards": "^9.5.1",
+    "@skyleague/therefore": "^7.9.0",
+    "cometd-nodejs-server": "^2.0.0",
+    "typescript": "^5.7.2"
   },
   "engines": {
-    "node": ">=20"
+    "node": ">=22"
   },
   "publishConfig": {
     "access": "public",
@@ -49,6 +49,5 @@
   },
   "node-standards": {
     "extends": ["library", "docusaurus"]
-  },
-  "workspaces": ["docs"]
+  }
 }

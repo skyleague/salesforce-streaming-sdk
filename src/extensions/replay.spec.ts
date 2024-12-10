@@ -1,6 +1,6 @@
 import { replayExtension } from './replay.js'
 
-import { alphaNumeric, dict, forAll, integer, tuple, unknown } from '@skyleague/axioms'
+import { alphaNumeric, forAll, integer, record, tuple, unknown } from '@skyleague/axioms'
 import { describe, expect, it, vi } from 'vitest'
 
 describe('incoming', () => {
@@ -37,7 +37,7 @@ describe('incoming', () => {
 
 describe('outgoing', () => {
     it('adds the replay ID for known channels, if the server supports replay', () => {
-        forAll(tuple(dict(integer({ min: 1 })), unknown()), ([replayIds, data]) => {
+        forAll(tuple(record(integer({ min: 1 })), unknown()), ([replayIds, data]) => {
             const extension = replayExtension(replayIds)
             extension.incoming({ channel: '/meta/handshake', ext: { replay: true } })
 
@@ -46,7 +46,7 @@ describe('outgoing', () => {
         })
     })
     it("doesn't add the replay ID for known channels, if the server doesn't support replay", () => {
-        forAll(tuple(dict(integer({ min: 1 })), unknown()), ([replayIds, data]) => {
+        forAll(tuple(record(integer({ min: 1 })), unknown()), ([replayIds, data]) => {
             const extension = replayExtension(replayIds)
             extension.incoming({ channel: '/meta/handshake' })
 
