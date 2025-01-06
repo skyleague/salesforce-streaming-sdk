@@ -1,26 +1,22 @@
+import http from 'node:http'
+import { json, random, sleep } from '@skyleague/axioms'
+import { createCometDServer } from 'cometd-nodejs-server'
+import { afterAll, afterEach, beforeAll, expect, it, vi } from 'vitest'
 import { SalesforceStreamingObservable } from './index.js'
 
-import { json, random, sleep } from '@skyleague/axioms'
-import { afterAll, afterEach, beforeAll, expect, it, vi } from 'vitest'
-
-import http from 'node:http'
-import { createRequire } from 'node:module'
-
-const require = createRequire(import.meta.url)
-// eslint-disable-next-line @typescript-eslint/consistent-type-imports
-const cometServer = (require('cometd-nodejs-server') as typeof import('cometd-nodejs-server')).createCometDServer()
-const server = http.createServer(cometServer.handle)
+const cometServer = createCometDServer()
+const httpServer = http.createServer((request, response) => cometServer.handle(request, response))
 
 beforeAll(
     () =>
         new Promise((done) => {
-            server.listen(12345, 'localhost', done)
+            httpServer.listen(12345, 'localhost', 0, () => done(0))
         }),
 )
 
 afterAll(() => {
     cometServer.close()
-    server.close()
+    httpServer.close()
 }, 60_000)
 
 let client: SalesforceStreamingObservable
